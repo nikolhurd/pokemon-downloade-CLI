@@ -1,4 +1,6 @@
 import inquirer from "inquirer";
+import fs from "fs/promises";
+import path from "path";
 
 const promptUser = () => {
   const questions = [
@@ -23,14 +25,44 @@ const promptUser = () => {
 promptUser();
 
 const fetchPokemon = (answers) => {
+  const pokemonName = answers.pokemonName;
   const response = fetch(
-    "https://pokeapi.co/api/v2/pokemon/" + `${answers.pokemonName}`
+    "https://pokeapi.co/api/v2/pokemon/" + `${pokemonName}`
   );
   response
     .then((data) => {
       return data.json();
     })
     .then((jsonData) => {
-      console.log(jsonData);
+      selectedInfo(pokemonName, jsonData, answers);
     });
+};
+
+const selectedInfo = (pokemonName, jsonData, answers) => {
+  answers.pokemonInfo.forEach((element) => {
+    switch (element) {
+      case "Stats":
+        getStats(pokemonName, jsonData);
+        break;
+      case "Sprites":
+        getSprites(pokemonName, jsonData);
+        break;
+      case "Artwork":
+        getArtwork(pokemonName, jsonData);
+        break;
+
+      default:
+        break;
+    }
+  });
+};
+
+const getStats = (pokemonName, jsonData) => {
+  console.log("Stats");
+};
+const getSprites = (pokemonName, jsonData) => {
+  console.log("Sprites");
+};
+const getArtwork = (pokemonName, jsonData) => {
+  console.log("Artwork");
 };
