@@ -16,23 +16,21 @@ const promptUser = () => {
   ];
 
   inquirer.prompt(questions).then((answers) => {
-    const response = fetch(
-      "https://pokeapi.co/api/v2/pokemon/" + `${answers.pokemonName}`
-    );
-    response
-      .then((data) => {
-        return data.json();
-      })
-      .then((jsonData) => {
-        console.log(jsonData);
-      });
+    fetchPokemon(answers);
   });
 };
 
 promptUser();
 
-// const fetchPokemon = (questions) => {
-
-// };
-
-// fetchPokemon();
+const fetchPokemon = (answers) => {
+  const response = fetch(
+    "https://pokeapi.co/api/v2/pokemon/" + `${answers.pokemonName}`
+  );
+  response
+    .then((data) => {
+      return data.json();
+    })
+    .then((jsonData) => {
+      console.log(jsonData);
+    });
+};
