@@ -26,6 +26,7 @@ promptUser();
 
 const fetchPokemon = (answers) => {
   const pokemonName = answers.pokemonName;
+  createFolder(pokemonName);
   const response = fetch(
     "https://pokeapi.co/api/v2/pokemon/" + `${pokemonName}`
   );
@@ -73,4 +74,17 @@ function getSprites(pokemonName, jsonData) {
 
 const getArtwork = (pokemonName, jsonData) => {
   console.log("Artwork");
+};
+
+const createFolder = async (pokemonName) => {
+  folderCheck(pokemonName);
+  await fs.mkdir(`./${pokemonName}`);
+};
+
+const folderCheck = async (pokemonName) => {
+  try {
+    return await fs.access(`./${pokemonName}`);
+  } catch {
+    console.log("folder already exists");
+  }
 };
