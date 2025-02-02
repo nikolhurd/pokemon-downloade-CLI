@@ -80,8 +80,19 @@ function getSprites(pokemonName, jsonData) {
   console.log("Sprites");
 }
 
-const getArtwork = (pokemonName, jsonData) => {
-  console.log("Artwork");
+const getArtwork = async (pokemonName, jsonData) => {
+  const pokemonObject = await jsonData;
+  const artworkURL =
+    pokemonObject.sprites.other["official-artwork"].front_default;
+  const response = await fetch(artworkURL);
+  const pokemonArtwork = await response.arrayBuffer();
+  const buffer = Buffer.from(pokemonArtwork);
+
+  const pokemonDirectory = path.join(
+    `./${pokemonName}`,
+    "original-artwork.png"
+  );
+  await fs.writeFile(pokemonDirectory, buffer);
 };
 
 const createFolder = async (pokemonName) => {
