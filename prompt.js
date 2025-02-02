@@ -60,14 +60,16 @@ const selectedInfo = (pokemonName, jsonData, answers) => {
 const getStats = async (pokemonName, jsonData) => {
   const pokemonObject = await jsonData;
   const pokemonStat = pokemonObject.stats;
-  for (const stat of pokemonStat) {
-    console.log(stat.stat.name + ": " + stat.base_stat);
-  }
+
+  let statString = "";
+  pokemonStat.forEach((stat) => {
+    statString += `${stat.stat.name} : ${stat.base_stat}\n`;
+  });
 };
 
-const getSprites = (pokemonName, jsonData) => {
+function getSprites(pokemonName, jsonData) {
   console.log("Sprites");
-};
+}
 
 const getArtwork = (pokemonName, jsonData) => {
   console.log("Artwork");
