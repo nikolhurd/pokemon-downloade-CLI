@@ -77,14 +77,19 @@ const getArtwork = (pokemonName, jsonData) => {
 };
 
 const createFolder = async (pokemonName) => {
-  folderCheck(pokemonName);
-  await fs.mkdir(`./${pokemonName}`);
+  const folderExists = await folderCheck(pokemonName);
+  if (!folderExists) {
+    await fs.mkdir(`./${pokemonName}`);
+  } else {
+    console.log("Folder already exists");
+  }
 };
 
 const folderCheck = async (pokemonName) => {
   try {
-    return await fs.access(`./${pokemonName}`);
+    await fs.access(`./${pokemonName}`);
+    return true;
   } catch {
-    console.log("folder already exists");
+    return false;
   }
 };
