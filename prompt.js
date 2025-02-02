@@ -1,6 +1,7 @@
 import inquirer from "inquirer";
 import fs from "fs/promises";
 import path from "path";
+import { opendir } from "fs";
 
 const promptUser = () => {
   const questions = [
@@ -66,6 +67,13 @@ const getStats = async (pokemonName, jsonData) => {
   pokemonStat.forEach((stat) => {
     statString += `${stat.stat.name} : ${stat.base_stat}\n`;
   });
+
+  saveStats(pokemonName, statString);
+};
+
+const saveStats = async (pokemonName, statString) => {
+  const pokemonDirectory = path.join(`./${pokemonName}`, "stats.txt");
+  await fs.writeFile(pokemonDirectory, statString);
 };
 
 function getSprites(pokemonName, jsonData) {
