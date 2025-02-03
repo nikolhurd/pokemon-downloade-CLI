@@ -1,7 +1,6 @@
 import inquirer from "inquirer";
 import fs from "fs/promises";
 import path from "path";
-import { opendir } from "fs";
 
 const promptUser = () => {
   const questions = [
@@ -76,14 +75,32 @@ const saveStats = async (pokemonName, statString) => {
   await fs.writeFile(pokemonDirectory, statString);
 };
 
-function getSprites(pokemonName, jsonData) {
-  console.log("Sprites");
-}
+const getSprites = async (pokemonName, jsonData) => {
+  const pokemonObject = await jsonData;
+  const allSprites = pokemonObject.sprites;
+
+  const filteredSprites = Object.entries(allSprites).filter(([key, value]) => {
+    return value !== null && typeof value === "string";
+  });
+  await saveSprites(pokemonName, filteredSprites);
+};
+
+const saveSprites = async (pokemonName, filteredSprites) => {
+  for (const sprite of filteredSprites) {
+    const response = await fetch(sprite[1]);
+    const eachSprite = await response.arrayBuffer();
+    const buffer = Buffer.from(eachSprite);
+
+    const pokemonDirectory = path.join(`./${pokemonName}`, `${sprite[0]}.png`);
+    await fs.writeFile(pokemonDirectory, buffer);
+  }
+};
 
 const getArtwork = async (pokemonName, jsonData) => {
   const pokemonObject = await jsonData;
   const artworkURL =
     pokemonObject.sprites.other["official-artwork"].front_default;
+
   const response = await fetch(artworkURL);
   const pokemonArtwork = await response.arrayBuffer();
   const buffer = Buffer.from(pokemonArtwork);
