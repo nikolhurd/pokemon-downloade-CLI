@@ -93,6 +93,7 @@ const saveSprites = async (pokemonName, filteredSprites) => {
 
     const pokemonDirectory = path.join(`./${pokemonName}`, `${sprite[0]}.png`);
     await fs.writeFile(pokemonDirectory, buffer);
+    console.log(`Saved: ${pokemonDirectory}`);
   }
 };
 
@@ -110,6 +111,7 @@ const getArtwork = async (pokemonName, jsonData) => {
     "original-artwork.png"
   );
   await fs.writeFile(pokemonDirectory, buffer);
+  console.log(`Saved: ${pokemonDirectory}`);
 };
 
 const createFolder = async (pokemonName) => {
