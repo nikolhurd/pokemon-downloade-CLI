@@ -1,6 +1,7 @@
 import inquirer from "inquirer";
 import fs from "fs/promises";
 import path from "path";
+import { type } from "os";
 
 const promptUser = () => {
   const questions = [
@@ -39,21 +40,39 @@ const fetchPokemon = (answers) => {
     });
 };
 
-const selectedInfo = (pokemonName, jsonData, answers) => {
-  answers.pokemonInfo.forEach((element) => {
+const selectedInfo = async (pokemonName, jsonData, answers) => {
+  for (const element of answers.pokemonInfo) {
     switch (element) {
       case "Stats":
-        getStats(pokemonName, jsonData);
+        await getStats(pokemonName, jsonData);
         break;
       case "Sprites":
-        getSprites(pokemonName, jsonData);
+        await getSprites(pokemonName, jsonData);
         break;
       case "Artwork":
-        getArtwork(pokemonName, jsonData);
+        await getArtwork(pokemonName, jsonData);
         break;
 
       default:
         break;
+    }
+  }
+  await repromptUser();
+};
+
+const repromptUser = async () => {
+  const questions = {
+    type: "confirm",
+    name: "searchAgain",
+    message: "Would you like to search for another pokemon?",
+  };
+
+  inquirer.prompt(questions).then((answers) => {
+    if (answers.searchAgain === true) {
+      promptUser();
+    } else {
+      console.log("Program ended");
+      process.exit();
     }
   });
 };
