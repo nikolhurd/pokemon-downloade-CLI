@@ -120,7 +120,10 @@ const getArtwork = async (pokemonName, jsonData) => {
   const pokemonObject = await jsonData;
   const artworkURL =
     pokemonObject.sprites.other["official-artwork"].front_default;
+  saveArtwork(pokemonName, artworkURL);
+};
 
+const saveArtwork = async (pokemonName, artworkURL) => {
   const response = await fetch(artworkURL);
   const pokemonArtwork = await response.arrayBuffer();
   const buffer = Buffer.from(pokemonArtwork);
